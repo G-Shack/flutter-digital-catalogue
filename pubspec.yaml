@@ -19,6 +19,7 @@ dependencies:
   rflutter_alert:
   printing:
   pdf:
+  shared_preferences:
 
 dev_dependencies:
   flutter_test:

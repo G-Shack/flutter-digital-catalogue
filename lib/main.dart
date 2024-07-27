@@ -1,5 +1,6 @@
 import 'package:alif_hw_pi/Provider/ProductListProvider.dart';
 import 'package:alif_hw_pi/screens/MainScreen.dart';
+import 'package:alif_hw_pi/screens/ProductDetailsPage.dart';
 import 'package:alif_hw_pi/screens/SetRatesScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,8 +36,6 @@ class MyApp extends StatelessWidget {
           routes: {
             MainScreen.id :(c)=>MainScreen(),
             SetRatesScreen.id: (c)=> SetRatesScreen(),
-            //ProductDetailsScreen.id :(c)=>ProductDetailsScreen(),
-            //OrderScreen.id :(c)=>OrderScreen(),
           },
         ),
     );

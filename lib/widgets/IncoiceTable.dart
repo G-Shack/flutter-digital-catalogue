@@ -201,6 +201,7 @@ class _InvoiceTableState extends State<InvoiceTable> {
                       TableCell(child: Padding(
                         padding: const EdgeInsets.only(left: 8.0, right: 8),
                         child: TextFormField(
+                          keyboardType: TextInputType.number,
                           initialValue: '1',
                           onChanged: (value){
                             if (index < tableValues.length) {

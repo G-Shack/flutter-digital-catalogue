@@ -1,4 +1,5 @@
 import 'package:alif_hw_pi/Provider/ProductListProvider.dart';
+import 'package:alif_hw_pi/screens/ProductDetailsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../model/Product.dart';
@@ -55,40 +56,48 @@ class _SetRatesScreenState extends State<SetRatesScreen> {
             const SizedBox(
               height: 20,
             ),
-            Expanded(
-              child: _foundProducts.isNotEmpty
-                  ? ListView.builder(
-                itemCount: _foundProducts.length,
-                itemBuilder: (context, index) => Card(
-                  key: ValueKey(_foundProducts[index].title),
-                  elevation: 4,
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  child: ListTile(
-                    leading: Image.asset(
-                      _foundProducts[index].image,
-                    ),
-                    trailing: Icon(Icons.arrow_forward_ios_rounded),
-                    title: Text(_foundProducts[index].title, style:TextStyle(fontWeight: FontWeight.bold
-                    )),
-                    subtitle: Text(
-                        'Rate:${_foundProducts[index].rate} \t \t Size:${_foundProducts[index].size}',
-                        style:TextStyle(
+            Consumer<Products>(builder: (context, products, child) {
+              return Expanded(
+                child: _foundProducts.isNotEmpty
+                    ? ListView.builder(
+                  itemCount: _foundProducts.length,
+                  itemBuilder: (context, index) => Card(
+                    key: ValueKey(_foundProducts[index].title),
+                    elevation: 4,
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    child: ListTile(
+                      leading: Image.asset(
+                        _foundProducts[index].image,
+                      ),
+                      trailing: Icon(Icons.arrow_forward_ios_rounded),
+                      title: Text(_foundProducts[index].title, style:TextStyle(fontWeight: FontWeight.bold
+                      )),
+                      subtitle: Text(
+                          'Rate:${_foundProducts[index].rate} \t \t Size:${_foundProducts[index].size}',
+                          style:TextStyle(
 
-                    )),
-                    onTap: (){
-                      print(_foundProducts[index].title);
-                    },
+                      )),
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetailsPage(theProduct: _foundProducts[index])));
+                      },
+                    ),
                   ),
+                )
+                    : const Text(
+                  'No results found',
+                  style: TextStyle(fontSize: 24),
                 ),
-              )
-                  : const Text(
-                'No results found',
-                style: TextStyle(fontSize: 24),
-              ),
+            );}
             ),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        Product newProduct = Product(id: '${(_allProducts.length)+1}', title: '', description: '', image: 'assets/images/noImage.png', size: '', rate: '');
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetailsPage(theProduct: newProduct)));
+        context.read<Products>().addProduct(newProduct);
+      },
+      child: Icon(Icons.add),),
     );
   }
 }
