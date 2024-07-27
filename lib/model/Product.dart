@@ -18,4 +18,15 @@ class Product {
     required this.rate,
   });
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'image': image,
+      'rate': rate,
+      'size': size,
+    };
+  }
+
 }

@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
+import '../Provider/ProductListProvider.dart';
 import '../widgets/AppDrawer.dart';
 
 class MainScreen extends StatefulWidget {
@@ -17,6 +18,14 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   TextEditingController billName = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<Products>().loadProducts();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
