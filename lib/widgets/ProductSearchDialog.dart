@@ -57,32 +57,41 @@ class _ProductSearchDialogState extends State<ProductSearchDialog> {
             },
           ),
           Expanded(
-            child: ListView.builder(
+            child: tempAvailProducts.isNotEmpty?
+            ListView.builder(
               itemCount: tempAvailProducts.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  leading: Image.asset(
-                    tempAvailProducts[index].image,
-                    fit: BoxFit.cover,
-                    width: 50,
-                    height: 50,
-                  ),
-                  title: Text(tempAvailProducts[index].title),
-                  subtitle: Text(
-                    'Rate:${tempAvailProducts[index].rate}   Size:${tempAvailProducts[index].size}',
-                  ),
-                  onTap: (){
-                    context.read<TableValuesProvider>().updateRow(
-                      tableIndex,
-                      tempAvailProducts[index].title,
+                return Card(
+
+                  elevation: 2,
+                  margin: const EdgeInsets.symmetric(vertical: 4),
+                  child: ListTile(
+                    leading: Image.asset(
                       tempAvailProducts[index].image,
-                      tempAvailProducts[index].size,
-                      tempAvailProducts[index].rate,
-                    );
-                    Navigator.of(context).pop();
-                  },
+                      fit: BoxFit.cover,
+                      width: 50,
+                      height: 50,
+                    ),
+                    title: Text(tempAvailProducts[index].title, style: TextStyle(fontWeight: FontWeight.bold),),
+                    subtitle: Text(
+                      'Rate:${tempAvailProducts[index].rate}   Size:${tempAvailProducts[index].size}',
+                    ),
+                    onTap: (){
+                      context.read<TableValuesProvider>().updateRow(
+                        tableIndex,
+                        tempAvailProducts[index].title,
+                        tempAvailProducts[index].image,
+                        tempAvailProducts[index].size,
+                        tempAvailProducts[index].rate,
+                      );
+                      Navigator.of(context).pop();
+                    },
+                  ),
                 );
               },
+            ):const Text(
+              '\nNo results found',
+              style: TextStyle(fontSize: 18),
             ),
           ),
           SizedBox(height: 20.0),
