@@ -14,6 +14,7 @@ class TableValuesProvider extends ChangeNotifier {
       _tableValues[index]['image'] = image;
       _tableValues[index]['size'] = size;
       _tableValues[index]['rate'] = rate;
+      _tableValues[index]['amount'] = rate;
       notifyListeners(); // Notify listeners of the change
     }
   }

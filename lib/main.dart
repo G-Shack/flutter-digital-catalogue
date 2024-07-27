@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color seedColor = Color(0xFFF2D794);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (BuildContext context)=>Products()),
@@ -22,9 +23,13 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Alif PI',
+          title: 'A.S. Hardware PI',
           theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(primary: Colors.amber, seedColor: Colors.brown, background: Colors.brown[200], surface: Colors.brown[200]),
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: seedColor,
+              primary: Color(0xFF212121), // Deep charcoal grey
+              secondary: Color(0xFFF2D794), // Soft amber as secondary
+            ),
             useMaterial3: true,),
           home: MainScreen(),
           routes: {

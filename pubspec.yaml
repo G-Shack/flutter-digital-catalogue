@@ -17,6 +17,8 @@ dependencies:
   provider:
   fluttertoast:
   rflutter_alert:
+  printing:
+  pdf:
 
 dev_dependencies:
   flutter_test:

@@ -71,7 +71,7 @@ class _InvoiceTableState extends State<InvoiceTable> {
     Alert(
       context: context,
       title: 'Calculated!',
-      desc: 'Net Price: $strTotalAmt\nNet Area: $strTotalQty\n',
+      desc: 'Net Price: $strTotalAmt\nNet Quantity: $strTotalQty\n',
       style: const AlertStyle(
         backgroundColor: Color(0xCD000000),
         descStyle: TextStyle(color: Colors.amber),

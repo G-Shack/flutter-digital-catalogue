@@ -22,64 +22,82 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Alif PI', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text('A.S. Hardware PI', style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       drawer: const AppDrawer(),
       body: Padding(
         padding: EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Invoice Name', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-                  SizedBox(width: 20),
-                  Expanded(
-                    child: TextField(
-                      controller: billName,
-                      decoration: InputDecoration(
-                        hintText: "Enter Customer Name",
-                        border: OutlineInputBorder(),
+        child: SingleChildScrollView(
+          reverse: true,
+          child: Center(
+            child: Column(
+              children: [
+                SizedBox(height: 70,),
+                Material(
+                  elevation: 15,
+                  shadowColor: Colors.amberAccent,
+                  shape: const CircleBorder(),
+                  child: CircleAvatar(
+                    radius: (MediaQuery.of(context).size.width/2)-50,
+                    backgroundImage: const AssetImage('assets/images/AlifLogo.png'),
+                  ),
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Invoice Name', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                      SizedBox(width: 20),
+                      Expanded(
+                        child: TextField(
+                          controller: billName,
+                          decoration: InputDecoration(
+                            hintText: "Enter Customer Name",
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 30),
+                SizedBox(
+                  width: 300,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if(billName.text!=""){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>DimensionPage(billName: billName.text)));
+                      }else{
+                        Fluttertoast.showToast(msg: 'Customer Name Empty!');
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      }
+
+                    },
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        backgroundColor: Colors.amber),
+                    child: const Center(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+                        child: Text(
+                          "PROCEED",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30,
+                              color: Colors.white),
+                        ),
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
-            SizedBox(height: 30),
-            SizedBox(
-              width: 300,
-              child: ElevatedButton(
-                onPressed: () {
-                  if(billName.text!=""){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>DimensionPage(billName: billName.text)));
-                  }else{
-                    Fluttertoast.showToast(msg: 'Customer Name Empty!');
-                    FocusManager.instance.primaryFocus?.unfocus();
-                  }
-
-                },
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    backgroundColor: Colors.amber),
-                child: const Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
-                    child: Text(
-                      "PROCEED",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                          color: Colors.white),
-                    ),
-                  ),
                 ),
-              ),
+                const SizedBox(height: 12)
+              ],
             ),
-            const SizedBox(height: 12)
-          ],
+          ),
         ),
       )
     );
