@@ -7,7 +7,10 @@ class CustomTableCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TableCell(
-      child: Center(child: Text(text)),
+      child: Center(child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(text, style: TextStyle(fontWeight: FontWeight.bold),),
+      )),
     );
   }
 }

@@ -2,7 +2,9 @@ import 'package:alif_hw_pi/widgets/CustomTableCell.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import '../Provider/ProductListProvider.dart';
 import '../Provider/TableValuesProvider.dart';
 import 'DimensionButton.dart';
@@ -24,11 +26,12 @@ class _InvoiceTableState extends State<InvoiceTable> {
       'image': 'assets/images/noImage.png',
       'title': '',
       'size': 'na',
-      'rate': '',
+      'rate': '1',
       'qty': '1',
       'amount': '',
     });
-    tableValuesProvider.changeTableValues(tableValues); // Update providerdirectly
+    tableValuesProvider.changeTableValues(tableValues);
+    print(tableValues);
   }
   void deleteRow() {
     final tableValuesProvider = context.read<TableValuesProvider>();
@@ -38,12 +41,52 @@ class _InvoiceTableState extends State<InvoiceTable> {
     }
   }
 
+  void showTotal() {
+    num totalQty = 0;
+    num totalAmount = 0;
+
+    for (var item in tableValues) {
+      // Use double.tryParse for safe conversion
+      double? qty = double.tryParse(item['qty'] ??'0');
+      double? rate = double.tryParse(item['rate'] ?? '0');
+      if(qty==0 || rate==1){
+        Fluttertoast.showToast(msg: 'Invalid Quantity/Rate in some items');
+        FocusManager.instance.primaryFocus?.unfocus();
+        return;
+      }
+      if (qty != null && rate != null) {
+        totalAmount += qty * rate;
+        totalQty += qty;
+      } else {
+        // Handle invalid input gracefully
+        Fluttertoast.showToast(msg: 'Invalid Quantity/Rate in some items');
+        FocusManager.instance.primaryFocus?.unfocus();
+        return; // Exit the function early
+      }
+    }
+
+    String strTotalAmt = totalAmount.toStringAsFixed(2);
+    String strTotalQty = totalQty.toStringAsFixed(2);
+
+    Alert(
+      context: context,
+      title: 'Calculated!',
+      desc: 'Net Price: $strTotalAmt\nNet Area: $strTotalQty\n',
+      style: const AlertStyle(
+        backgroundColor: Color(0xCD000000),
+        descStyle: TextStyle(color: Colors.amber),
+        titleStyle: TextStyle(color: Colors.amber),
+        isButtonVisible: false,
+      ),
+    ).show();
+  }
+
   List<Map<String, dynamic>> tableValues = [
     {
       'image': 'assets/images/noImage.png',
       'title': '',
       'size':'na',
-      'rate':'',
+      'rate':'1',
       'qty':'1',
       'amount':'',
     }
@@ -65,8 +108,9 @@ class _InvoiceTableState extends State<InvoiceTable> {
       if (screenWidth < 450) {
         double multiFactor = 565 / screenWidth;
         return {
-          0: FixedColumnWidth(27.0 * multiFactor),1: FixedColumnWidth(54.0 * multiFactor),
-          2: FixedColumnWidth(64.0 * multiFactor),
+          0: FixedColumnWidth(27.0 * multiFactor),
+          1: FixedColumnWidth(54.0 * multiFactor),
+          2: FixedColumnWidth(84.0 * multiFactor),
           3: FixedColumnWidth(64.0 * multiFactor),
           4: FixedColumnWidth(54.0 * multiFactor),
           5: FixedColumnWidth(42.0 * multiFactor),
@@ -77,7 +121,7 @@ class _InvoiceTableState extends State<InvoiceTable> {
         return {
           0: FixedColumnWidth(27.0 * multiFactor),
           1: FixedColumnWidth(54.0 * multiFactor),
-          2: FixedColumnWidth(64.0 * multiFactor),
+          2: FixedColumnWidth(84.0 * multiFactor),
           3: FixedColumnWidth(64.0 * multiFactor),
           4: FixedColumnWidth(54.0 * multiFactor),
           5: FixedColumnWidth(42.0 * multiFactor),
@@ -96,15 +140,15 @@ class _InvoiceTableState extends State<InvoiceTable> {
               columnWidths: getColumnWidth(),
               border: _border,
               children: [
-                TableRow(
+                const TableRow(
                   children: [
                     CustomTableCell(text: 'Sr.'),
-                    CustomTableCell(text: 'Image'),
-                    CustomTableCell(text: 'Product'),
-                    CustomTableCell(text: 'Size'),
-                    CustomTableCell(text: 'Rate'),
-                    CustomTableCell(text: 'Qty'),
-                    CustomTableCell(text: 'Amount'),
+                    CustomTableCell(text: 'IMAGE'),
+                    CustomTableCell(text: 'PRODUCT'),
+                    CustomTableCell(text: 'SIZE'),
+                    CustomTableCell(text: 'RATE'),
+                    CustomTableCell(text: 'QTY'),
+                    CustomTableCell(text: 'AMOUNT'),
                   ],
                 ),
                 ...List<TableRow>.generate(tableValues.length, (index) {
@@ -137,22 +181,43 @@ class _InvoiceTableState extends State<InvoiceTable> {
 
                   return TableRow(
                     children: [
-                      TableCell(child: Text(getSrNo())),
-                      TableCell(child: Image.asset(tableValues[index]['image'])),
+                      TableCell(child: Center(child: Text(getSrNo(), style: TextStyle(fontSize: 18),))),
+                      TableCell(child: Image.asset(tableValues[index]['image'],fit: BoxFit.fill, width: 50, height: 50,)),
                       TableCell(
-                        child: SizedBox(
-                          height: 50,
-                          width: 50,
-                          child: GestureDetector(
-                            onTap: () => _showPopup(context, index),
-                            child: Text(tableValues[index]['title']),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 8),
+                          child: SizedBox(
+                            width:75,
+                            height:50,
+                            child: GestureDetector(
+                              onTap: () => _showPopup(context, index),
+                              child: Text(tableValues[index]['title'], style: TextStyle(fontSize: 16)),
+                            ),
                           ),
                         ),
                       ),
-                      TableCell(child: Text(tableValues[index]['size'])),
-                      TableCell(child: Text(tableValues[index]['rate'])),
-                      TableCell(child: Text('1')),
-                      TableCell(child: Text('1')),
+                      TableCell(child: Center(child: Text(tableValues[index]['size'], style: TextStyle(fontSize: 16)))),
+                      TableCell(child: Center(child: Text(tableValues[index]['rate'] , style: TextStyle(fontSize: 16)))),
+                      TableCell(child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8),
+                        child: TextFormField(
+                          initialValue: '1',
+                          onChanged: (value){
+                            if (index < tableValues.length) {
+                              tableValues[index]['qty'] = value;
+                              // Calculate amount here
+                              double qty = double.tryParse(value) ?? 1.0;
+                              double rate = double.tryParse(tableValues[index]['rate']) ?? 1.0;
+                              double amount = qty * rate;
+                              tableValues[index]['amount'] = amount.toStringAsFixed(2);
+                            } else {
+                              tableValues.add({'qty': value, 'amount': '0.00'}); // Add with default amount
+                            }
+                            context.read<TableValuesProvider>().changeTableValues(tableValues);
+                          },
+                        ),
+                      )),
+                      TableCell(child: Center(child: Text(tableValues[index]['amount'] ?? '0.00',style: TextStyle(fontSize: 16),))),
                     ],
                   );
                 }),
@@ -167,6 +232,7 @@ class _InvoiceTableState extends State<InvoiceTable> {
             const SizedBox(width: 10),
             DimensionButton(btnTxt: 'Del Row', fun: deleteRow),
             const SizedBox(width: 10),
+            DimensionButton(btnTxt: 'Total', fun: showTotal),
           ],
         ),
       ],

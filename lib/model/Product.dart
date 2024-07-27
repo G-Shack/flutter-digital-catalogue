@@ -4,8 +4,8 @@ class Product {
   final String title;
   final String description;
   final String image;
-  final List<String> size;
-  final List<double> rate;
+  final String size;
+  final String rate;
 
 
   Product({

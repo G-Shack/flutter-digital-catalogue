@@ -62,6 +62,7 @@ class _MainScreenState extends State<MainScreen> {
 
                 },
                 style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     backgroundColor: Colors.amber),
                 child: const Center(
                   child: Padding(

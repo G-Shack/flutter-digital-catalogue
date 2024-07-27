@@ -69,15 +69,15 @@ class _ProductSearchDialogState extends State<ProductSearchDialog> {
                   ),
                   title: Text(tempAvailProducts[index].title),
                   subtitle: Text(
-                    'Rate:${tempAvailProducts[index].rate[0].toString()}   Size:${tempAvailProducts[index].size[0]}',
+                    'Rate:${tempAvailProducts[index].rate}   Size:${tempAvailProducts[index].size}',
                   ),
                   onTap: (){
                     context.read<TableValuesProvider>().updateRow(
                       tableIndex,
                       tempAvailProducts[index].title,
                       tempAvailProducts[index].image,
-                      tempAvailProducts[index].size[0].toString(),
-                      tempAvailProducts[index].rate[0].toString(),
+                      tempAvailProducts[index].size,
+                      tempAvailProducts[index].rate,
                     );
                     Navigator.of(context).pop();
                   },

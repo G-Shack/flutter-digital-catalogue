@@ -26,6 +26,10 @@ class DimensionPage extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Color(0xCD000000),
+        child: Icon(Icons.save, color: Colors.amber,),
+        onPressed: (){},),
     );
   }
 }
