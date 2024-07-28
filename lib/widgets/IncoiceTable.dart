@@ -180,7 +180,7 @@ class _InvoiceTableState extends State<InvoiceTable> {
                   return TableRow(
                     children: [
                       TableCell(child: Center(child: Text(getSrNo(), style: const TextStyle(fontSize: 18),))),
-                      TableCell(child: Image.asset(tableValues[index]['image'],fit: BoxFit.fill, width: 50, height: 50,)),
+                      TableCell(child: Image.asset(tableValues[index]['image'],fit: BoxFit.fill, width: 50, height: 70,)),
                       TableCell(
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0, right: 8),

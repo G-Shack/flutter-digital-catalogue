@@ -115,8 +115,8 @@ class PdfService{
       }
       return pw.Table(
         columnWidths: {
-          0: const pw.FixedColumnWidth(75.0),
-          1: const pw.FixedColumnWidth(150.0),
+          0: const pw.FixedColumnWidth(45.0),
+          1: const pw.FixedColumnWidth(180.0),
           2: const pw.FixedColumnWidth(85.0),
           3: const pw.FixedColumnWidth(85.0),
           4: const pw.FixedColumnWidth(50.0),

@@ -68,12 +68,13 @@ class _SetRatesScreenState extends State<SetRatesScreen> {
                     child: ListTile(
                       leading: Image.asset(
                         _foundProducts[index].image,
+                        fit: BoxFit.fill,
                       ),
                       trailing: const Icon(Icons.arrow_forward_ios_rounded),
                       title: Text(_foundProducts[index].title, style:const TextStyle(fontWeight: FontWeight.bold
                       )),
                       subtitle: Text(
-                          'Rate:${_foundProducts[index].rate} \t \t Size:${_foundProducts[index].size}',
+                          'Rate: ${_foundProducts[index].rate} \t \t Size: ${_foundProducts[index].size}',
                           style:const TextStyle(color: Colors.black)),
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetailsPage(theProduct: _foundProducts[index])));
