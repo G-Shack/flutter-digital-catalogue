@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../Provider/TableValuesProvider.dart';
-import '../model/Product.dart';
+import '../Provider/table_values_provider.dart';
+import '../model/product_model.dart';
 import 'DimensionButton.dart';
 
 class ProductSearchDialog extends StatefulWidget {
@@ -30,18 +30,18 @@ class _ProductSearchDialogState extends State<ProductSearchDialog> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(
+        children: [
+          const Text(
             'Add Product',
             style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 10.0),
+          const SizedBox(height: 10.0),
           TextField(
             controller: searchController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               prefixIcon: Icon(Icons.search),
               hintText: 'Search Product',
               border: OutlineInputBorder(),
@@ -72,7 +72,7 @@ class _ProductSearchDialogState extends State<ProductSearchDialog> {
                       width: 50,
                       height: 50,
                     ),
-                    title: Text(tempAvailProducts[index].title, style: TextStyle(fontWeight: FontWeight.bold),),
+                    title: Text(tempAvailProducts[index].title, style: const TextStyle(fontWeight: FontWeight.bold),),
                     subtitle: Text(
                       'Rate:${tempAvailProducts[index].rate}   Size:${tempAvailProducts[index].size}',
                     ),
@@ -94,7 +94,7 @@ class _ProductSearchDialogState extends State<ProductSearchDialog> {
               style: TextStyle(fontSize: 18),
             ),
           ),
-          SizedBox(height: 20.0),
+          const SizedBox(height: 20.0),
           DimensionButton(
             btnTxt: 'Cancel',
             fun: () {

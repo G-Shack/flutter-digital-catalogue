@@ -1,9 +1,8 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../model/Product.dart';
+import '../model/product_model.dart';
 
 class Products with ChangeNotifier{
   List<Product> _availProducts = [
@@ -37,7 +36,7 @@ class Products with ChangeNotifier{
     if (productsString != null) {
       print('loaded: $productsString');
       var productsJson = jsonDecode(productsString) as List;
-      _availProducts = productsJson.map((productJson) {
+      List<Product> fetchAvailProducts = productsJson.map((productJson) {
         return Product(
           id: productJson['id'],
           title: productJson['title'],
@@ -47,6 +46,9 @@ class Products with ChangeNotifier{
           size: productJson['size'],
         );
       }).toList();
+      if(!listEquals(fetchAvailProducts, _availProducts)){
+        _availProducts = fetchAvailProducts.length>_availProducts.length?fetchAvailProducts:_availProducts;
+      }
     } else {
       // Convert each Product to a Map using toJson
       var productsJson = _availProducts.map((product) => product.toJson()).toList();

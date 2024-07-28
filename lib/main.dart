@@ -1,11 +1,10 @@
-import 'package:alif_hw_pi/Provider/ProductListProvider.dart';
-import 'package:alif_hw_pi/screens/MainScreen.dart';
-import 'package:alif_hw_pi/screens/ProductDetailsPage.dart';
-import 'package:alif_hw_pi/screens/SetRatesScreen.dart';
+import 'package:alif_hw_pi/Provider/product_list_provider.dart';
+import 'package:alif_hw_pi/screens/main_screen.dart';
+import 'package:alif_hw_pi/screens/set_rates_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'Provider/TableValuesProvider.dart';
+import 'Provider/table_values_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +15,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color seedColor = Color(0xFFF2D794);
+    Color seedColor = const Color(0xFFF2D794);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (BuildContext context)=>Products()),
@@ -28,14 +27,14 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
               seedColor: seedColor,
-              primary: Color(0xFF212121), // Deep charcoal grey
-              secondary: Color(0xFFF2D794), // Soft amber as secondary
+              primary: const Color(0xFF212121), // Deep charcoal grey
+              secondary: const Color(0xFFF2D794), // Soft amber as secondary
             ),
             useMaterial3: true,),
-          home: MainScreen(),
+          home: const MainScreen(),
           routes: {
-            MainScreen.id :(c)=>MainScreen(),
-            SetRatesScreen.id: (c)=> SetRatesScreen(),
+            MainScreen.id :(c)=>const MainScreen(),
+            SetRatesScreen.id: (c)=> const SetRatesScreen(),
           },
         ),
     );

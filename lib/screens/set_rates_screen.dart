@@ -1,8 +1,8 @@
-import 'package:alif_hw_pi/Provider/ProductListProvider.dart';
-import 'package:alif_hw_pi/screens/ProductDetailsPage.dart';
+import 'package:alif_hw_pi/Provider/product_list_provider.dart';
+import 'package:alif_hw_pi/screens/product_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../model/Product.dart';
+import '../model/product_model.dart';
 
 class SetRatesScreen extends StatefulWidget {
   static const id = '/SetRatesScreen';
@@ -39,7 +39,7 @@ class _SetRatesScreenState extends State<SetRatesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Set Rates')),
+      appBar: AppBar(title: const Text('Set Rates')),
       body: Padding(
         padding: const EdgeInsets.all(18),
         child: Column(
@@ -69,14 +69,12 @@ class _SetRatesScreenState extends State<SetRatesScreen> {
                       leading: Image.asset(
                         _foundProducts[index].image,
                       ),
-                      trailing: Icon(Icons.arrow_forward_ios_rounded),
-                      title: Text(_foundProducts[index].title, style:TextStyle(fontWeight: FontWeight.bold
+                      trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                      title: Text(_foundProducts[index].title, style:const TextStyle(fontWeight: FontWeight.bold
                       )),
                       subtitle: Text(
                           'Rate:${_foundProducts[index].rate} \t \t Size:${_foundProducts[index].size}',
-                          style:TextStyle(
-
-                      )),
+                          style:const TextStyle(color: Colors.black)),
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetailsPage(theProduct: _foundProducts[index])));
                       },
@@ -97,7 +95,7 @@ class _SetRatesScreenState extends State<SetRatesScreen> {
         Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetailsPage(theProduct: newProduct)));
         context.read<Products>().addProduct(newProduct);
       },
-      child: Icon(Icons.add),),
+      child: const Icon(Icons.add),),
     );
   }
 }

@@ -1,5 +1,5 @@
-import 'package:alif_hw_pi/screens/MainScreen.dart';
-import 'package:alif_hw_pi/screens/SetRatesScreen.dart';
+import 'package:alif_hw_pi/screens/main_screen.dart';
+import 'package:alif_hw_pi/screens/set_rates_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -8,7 +8,7 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Color(0xCD000000),
+      backgroundColor: const Color(0xCD000000),
       child: Column(
         children: [
           const DrawerHeader(

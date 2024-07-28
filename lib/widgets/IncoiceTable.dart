@@ -1,18 +1,16 @@
 import 'package:alif_hw_pi/widgets/CustomTableCell.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import '../Provider/ProductListProvider.dart';
-import '../Provider/TableValuesProvider.dart';
+import '../Provider/product_list_provider.dart';
+import '../Provider/table_values_provider.dart';
 import 'DimensionButton.dart';
 import 'ProductSearchDialog.dart';
 
 
 class InvoiceTable extends StatefulWidget {
-  InvoiceTable({super.key});
+  const InvoiceTable({super.key});
 
   @override
   State<InvoiceTable> createState() => _InvoiceTableState();
@@ -102,7 +100,7 @@ class _InvoiceTableState extends State<InvoiceTable> {
   Widget build(BuildContext context) {
     final availProducts = Provider.of<Products>(context).availProducts;
     double screenWidth = MediaQuery.of(context).size.width;
-    final _border = TableBorder.all(width: 1.5);
+    final border = TableBorder.all(width: 1.5);
 
     getColumnWidth() {
       if (screenWidth < 450) {
@@ -138,7 +136,7 @@ class _InvoiceTableState extends State<InvoiceTable> {
             final tableValues = tableValuesProvider.tableValues;
             return Table(
               columnWidths: getColumnWidth(),
-              border: _border,
+              border: border,
               children: [
                 const TableRow(
                   children: [
@@ -162,7 +160,7 @@ class _InvoiceTableState extends State<InvoiceTable> {
                     return srNo.toString();
                   }
 
-                  void _showPopup(BuildContext context, int tableIndex) {
+                  void showPopup(BuildContext context, int tableIndex) {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -181,7 +179,7 @@ class _InvoiceTableState extends State<InvoiceTable> {
 
                   return TableRow(
                     children: [
-                      TableCell(child: Center(child: Text(getSrNo(), style: TextStyle(fontSize: 18),))),
+                      TableCell(child: Center(child: Text(getSrNo(), style: const TextStyle(fontSize: 18),))),
                       TableCell(child: Image.asset(tableValues[index]['image'],fit: BoxFit.fill, width: 50, height: 50,)),
                       TableCell(
                         child: Padding(
@@ -190,14 +188,14 @@ class _InvoiceTableState extends State<InvoiceTable> {
                             width:75,
                             height:50,
                             child: GestureDetector(
-                              onTap: () => _showPopup(context, index),
-                              child: Text(tableValues[index]['title'], style: TextStyle(fontSize: 16)),
+                              onTap: () => showPopup(context, index),
+                              child: Text(tableValues[index]['title'], style: const TextStyle(fontSize: 16)),
                             ),
                           ),
                         ),
                       ),
-                      TableCell(child: Center(child: Text(tableValues[index]['size'], style: TextStyle(fontSize: 16)))),
-                      TableCell(child: Center(child: Text(tableValues[index]['rate'] , style: TextStyle(fontSize: 16)))),
+                      TableCell(child: Center(child: Text(tableValues[index]['size'], style: const TextStyle(fontSize: 16)))),
+                      TableCell(child: Center(child: Text(tableValues[index]['rate'] , style: const TextStyle(fontSize: 16)))),
                       TableCell(child: Padding(
                         padding: const EdgeInsets.only(left: 8.0, right: 8),
                         child: TextFormField(
@@ -218,7 +216,7 @@ class _InvoiceTableState extends State<InvoiceTable> {
                           },
                         ),
                       )),
-                      TableCell(child: Center(child: Text(tableValues[index]['amount'] ?? '0.00',style: TextStyle(fontSize: 16),))),
+                      TableCell(child: Center(child: Text(tableValues[index]['amount'] ?? '0.00',style: const TextStyle(fontSize: 16),))),
                     ],
                   );
                 }),
@@ -226,7 +224,7 @@ class _InvoiceTableState extends State<InvoiceTable> {
             );
           },
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Row(
           children: [
             DimensionButton(btnTxt: 'Add Row', fun: addRow),

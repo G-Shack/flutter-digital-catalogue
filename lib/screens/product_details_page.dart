@@ -1,8 +1,8 @@
-import 'package:alif_hw_pi/model/Product.dart';
+import 'package:alif_hw_pi/model/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../Provider/ProductListProvider.dart';
+import '../Provider/product_list_provider.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   static const id = '/ProductDetailsPage';
@@ -24,7 +24,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     TextEditingController rateController = TextEditingController(text: widget.theProduct.rate);
     TextEditingController sizeController = TextEditingController(text: widget.theProduct.size);
     return Scaffold(
-      appBar: AppBar(title: Text('Edit Product'),
+      appBar: AppBar(title: const Text('Edit Product'),
         actions: [
         IconButton(onPressed: (){
           int productIndex = context.read<Products>().availProducts.indexWhere(
@@ -36,7 +36,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           } else {
             print('Product not found!');
           }
-        }, icon: Icon(Icons.delete, color: Colors.redAccent,))
+        }, icon: const Icon(Icons.delete, color: Colors.redAccent,))
       ],),
       body: SingleChildScrollView(
         reverse: true,
@@ -50,34 +50,34 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   child: SizedBox(width: 250,height: 250,child: Image.asset(widget.theProduct.image)),
                 ),
-               SizedBox(height: 30),
+               const SizedBox(height: 30),
                TextFormField(
                  controller: titleController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     label: Text('Product Name'),
                   ),
                ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Expanded(child: TextFormField(
                       controller: rateController,
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         label: Text('Rate'),
                       ),
                     ),),
-                    SizedBox(width: 30,),
+                    const SizedBox(width: 30,),
                     Expanded(child: TextFormField(
                       controller: sizeController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         label: Text('Size'),
                       ),
                     ),),
                   ],
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 ElevatedButton(onPressed: (){
                   String updatedTitle = titleController.text;
                   String updatedRate = rateController.text;
@@ -94,14 +94,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     // Handle the case where the product is not found
                     print('Product not found!');
                   }
-                },
-                  child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('SAVE',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-                ), style: ButtonStyle(
-                  shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                }, style: ButtonStyle(
+                  shape: const MaterialStatePropertyAll(RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(12)))),
                   backgroundColor: MaterialStateColor.resolveWith((states) => Colors.amber),
+                ),
+                  child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text('SAVE',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                 ),)
               ],
             ),

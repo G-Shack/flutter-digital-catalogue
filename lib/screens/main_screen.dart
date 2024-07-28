@@ -1,16 +1,14 @@
-import 'package:alif_hw_pi/screens/DimensionPage.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:alif_hw_pi/screens/dimension_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-import '../Provider/ProductListProvider.dart';
+import '../Provider/product_list_provider.dart';
 import '../widgets/AppDrawer.dart';
 
 class MainScreen extends StatefulWidget {
   static const id = '/MainScreen';
-  MainScreen({super.key});
+  const MainScreen({super.key});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -31,17 +29,17 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('A.S. Hardware PI', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('A.S. Hardware PI', style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       drawer: const AppDrawer(),
       body: Padding(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
           reverse: true,
           child: Center(
             child: Column(
               children: [
-                SizedBox(height: 70,),
+                const SizedBox(height: 70,),
                 Material(
                   elevation: 15,
                   shadowColor: Colors.amberAccent,
@@ -55,16 +53,16 @@ class _MainScreenState extends State<MainScreen> {
                   height: 50,
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Invoice Name', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-                      SizedBox(width: 20),
+                      const Text('Invoice Name', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                      const SizedBox(width: 20),
                       Expanded(
                         child: TextField(
                           controller: billName,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "Enter Customer Name",
                             border: OutlineInputBorder(),
                           ),
@@ -73,7 +71,7 @@ class _MainScreenState extends State<MainScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 SizedBox(
                   width: 300,
                   child: ElevatedButton(

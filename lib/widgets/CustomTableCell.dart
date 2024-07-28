@@ -9,7 +9,7 @@ class CustomTableCell extends StatelessWidget {
     return TableCell(
       child: Center(child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text(text, style: TextStyle(fontWeight: FontWeight.bold),),
+        child: Text(text, style: const TextStyle(fontWeight: FontWeight.bold),),
       )),
     );
   }

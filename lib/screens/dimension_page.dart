@@ -1,10 +1,10 @@
-import 'package:alif_hw_pi/Provider/TableValuesProvider.dart';
+import 'package:alif_hw_pi/Provider/table_values_provider.dart';
 import 'package:alif_hw_pi/widgets/IncoiceTable.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../Services/pdf_service.dart';
-import 'PdfPreviewPage.dart';
+import 'pdf_preview_page.dart';
 
 
 class DimensionPage extends StatelessWidget {
@@ -15,9 +15,9 @@ class DimensionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<TableValuesProvider>(builder: (context, provider, child) {
     return Scaffold(
-      appBar: AppBar(title: Text('A.S. Hardware PI'),),
+      appBar: AppBar(title: const Text('A.S. Hardware PI'),),
       body: Padding(
-        padding: EdgeInsets.all(15),
+        padding: const EdgeInsets.all(15),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: SingleChildScrollView(
@@ -25,17 +25,17 @@ class DimensionPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Customer Name: $billName', style: TextStyle(fontSize: 18),),
-                SizedBox(height: 10,),
-                InvoiceTable(),
+                Text('Customer Name: $billName', style: const TextStyle(fontSize: 18),),
+                const SizedBox(height: 10,),
+                const InvoiceTable(),
               ],
             ),
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xCD000000),
-        child: Icon(Icons.save, color: Colors.amber,),
+        backgroundColor: const Color(0xCD000000),
+        child: const Icon(Icons.save, color: Colors.amber,),
         onPressed: () async {
           var tableValues = provider.tableValues;
           final bill =
