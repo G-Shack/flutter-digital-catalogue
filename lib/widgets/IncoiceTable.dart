@@ -194,7 +194,7 @@ class _InvoiceTableState extends State<InvoiceTable> {
                           ),
                         ),
                       ),
-                      TableCell(child: Center(child: Text(tableValues[index]['size'], style: const TextStyle(fontSize: 16)))),
+                      TableCell(child: Center(child: Text(tableValues[index]['size'], style: const TextStyle(fontSize: 14)))),
                       TableCell(child: Center(child: Text(tableValues[index]['rate'] , style: const TextStyle(fontSize: 16)))),
                       TableCell(child: Padding(
                         padding: const EdgeInsets.only(left: 8.0, right: 8),

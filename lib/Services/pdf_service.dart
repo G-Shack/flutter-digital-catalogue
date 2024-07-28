@@ -146,11 +146,67 @@ class PdfService{
         ],
       );
     }
+    pw.Table tableFooter() {
+      return pw.Table(
+        border: pw.TableBorder.all(),
+        children: [
+          pw.TableRow(
+            children: [
+              pw.Padding(
+                  padding: const pw.EdgeInsets.all(2),
+                  child: pw.Text("A/C NO:",
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
+              pw.Padding(
+                  padding: const pw.EdgeInsets.all(2),
+                  child: pw.Text("852511021000069",
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
+              pw.Padding(
+                  padding: const pw.EdgeInsets.all(2),
+                  child: pw.Text("A/C TYPE:",
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
+              pw.Padding(
+                  padding: const pw.EdgeInsets.all(2),
+                  child: pw.Text("CURRENT ACCOUNT")),
+            ],
+          ),
+          pw.TableRow(
+            children: [
+              pw.Padding(
+                  padding: const pw.EdgeInsets.all(2),
+                  child: pw.Text("BANK:",
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
+              pw.Padding(
+                  padding: const pw.EdgeInsets.all(2),
+                  child: pw.Text("HDFC BANK SUPA")),
+              pw.Padding(
+                  padding: const pw.EdgeInsets.all(2),
+                  child: pw.Text("IFSC CODE:",
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
+              pw.Padding(
+                  padding: const pw.EdgeInsets.all(2),
+                  child: pw.Text("HDFC0CSSSSN")),
+            ],
+          ),
+          pw.TableRow(
+            children: [
+              pw.Padding(
+                  padding: const pw.EdgeInsets.all(2),
+                  child: pw.Text("PAYMENT:",
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
+              blankCell(),
+              blankCell(),
+              blankCell(),
+            ],
+          ),
+        ],
+      );
+    }
 
     pageWidgets.add(logoArea);
     pageWidgets.add(title);
     pageWidgets.add(title2);
     pageWidgets.add(table());
+    pageWidgets.add(tableFooter());
 
 
     pdf.addPage(pw.MultiPage(
