@@ -47,7 +47,7 @@ class _InvoiceTableState extends State<InvoiceTable> {
       // Use double.tryParse for safe conversion
       double? qty = double.tryParse(item['qty'] ??'0');
       double? rate = double.tryParse(item['rate'] ?? '0');
-      if(qty==0 || rate==1){
+      if(qty==0 || rate==0){
         Fluttertoast.showToast(msg: 'Invalid Quantity/Rate in some items');
         FocusManager.instance.primaryFocus?.unfocus();
         return;

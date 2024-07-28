@@ -146,7 +146,7 @@ class Products with ChangeNotifier{
         );
       }).toList();
       if(!listEquals(fetchAvailProducts, _availProducts)){
-        _availProducts = fetchAvailProducts.length>_availProducts.length?fetchAvailProducts:_availProducts;
+        _availProducts = fetchAvailProducts;
       }
     } else {
       // Convert each Product to a Map using toJson

@@ -35,11 +35,11 @@ class PdfService{
                         pw.Expanded(
                             child: pw.Text(
                                 "Address: Plot no. D-83, SUPA MIDC, Tal. Parner, Dist. Ahmednagar, Pincode: 414301",
-                                style: const pw.TextStyle(fontSize: 10))),
+                                style: const pw.TextStyle(fontSize: 8))),
                         pw.SizedBox(height: 8),
                         pw.Expanded(
                             child: pw.Text(
-                                "Contact No. 9657895687",
+                                "Contact No. +91 9657895687",
                                 style: const pw.TextStyle(fontSize: 10))),
                       ],
                     ))),
@@ -129,8 +129,8 @@ class PdfService{
               textCellBold("Sr"),
               textCellBold("NAME OF MATERIAL"),
               textCellBold("SIZE"),
-              textCellBold("QTY"),
               textCellBold("RATE"),
+              textCellBold("QTY"),
               textCellBold("AMOUNT"),
             ],
           ),
