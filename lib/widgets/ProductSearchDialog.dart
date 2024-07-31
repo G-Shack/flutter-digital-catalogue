@@ -62,7 +62,6 @@ class _ProductSearchDialogState extends State<ProductSearchDialog> {
               itemCount: tempAvailProducts.length,
               itemBuilder: (context, index) {
                 return Card(
-
                   elevation: 2,
                   margin: const EdgeInsets.symmetric(vertical: 4),
                   child: ListTile(

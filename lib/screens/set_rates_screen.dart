@@ -77,6 +77,7 @@ class _SetRatesScreenState extends State<SetRatesScreen> {
                           'Rate: ${_foundProducts[index].rate} \t \t Size: ${_foundProducts[index].size}',
                           style:const TextStyle(color: Colors.black)),
                       onTap: (){
+                        FocusManager.instance.primaryFocus?.unfocus();
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetailsPage(theProduct: _foundProducts[index])));
                       },
                     ),
@@ -92,9 +93,12 @@ class _SetRatesScreenState extends State<SetRatesScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(onPressed: () {
-        Product newProduct = Product(id: '${(_allProducts.length)+1}', title: '', description: '', image: 'assets/images/noImage.png', size: '', rate: '');
+        int lastProductIndex = (_allProducts.length)-1;
+        int lastProductId = int.tryParse(_allProducts[lastProductIndex].id)??1000;
+        Product newProduct = Product(id: '${lastProductId+1}', title: '', description: '', image: 'assets/images/noImage.png', size: '', rate: '');
         Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetailsPage(theProduct: newProduct)));
         context.read<Products>().addProduct(newProduct);
+        print(newProduct.id);
       },
       child: const Icon(Icons.add),),
     );
