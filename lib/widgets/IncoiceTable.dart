@@ -176,7 +176,7 @@ class _InvoiceTableState extends State<InvoiceTable> {
                       },
                     );
                   }
-
+                  double amount =0;
                   return TableRow(
                     children: [
                       TableCell(child: Center(child: Text(getSrNo(), style: const TextStyle(fontSize: 18),))),
@@ -195,7 +195,25 @@ class _InvoiceTableState extends State<InvoiceTable> {
                         ),
                       ),
                       TableCell(child: Center(child: Text(tableValues[index]['size'], style: const TextStyle(fontSize: 14)))),
-                      TableCell(child: Center(child: Text(tableValues[index]['rate'] , style: const TextStyle(fontSize: 16)))),
+                      TableCell(child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8),
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          initialValue: '0',
+                          onChanged: (value){
+                            if (index < tableValues.length) {
+                              tableValues[index]['rate'] = value;
+                              double rate = double.tryParse(value) ?? 0;
+                              double qty = double.tryParse(tableValues[index]['qty']) ?? 1.0;
+                              amount = qty * rate;
+                              tableValues[index]['amount'] = amount.toStringAsFixed(2);
+                            } else {
+                              tableValues.add({'rate': value, 'amount': '0.00'}); // Add with default amount
+                            }
+                            context.read<TableValuesProvider>().changeTableValues(tableValues);
+                          },
+                        ),
+                      )),
                       TableCell(child: Padding(
                         padding: const EdgeInsets.only(left: 8.0, right: 8),
                         child: TextFormField(
@@ -207,7 +225,7 @@ class _InvoiceTableState extends State<InvoiceTable> {
                               // Calculate amount here
                               double qty = double.tryParse(value) ?? 1.0;
                               double rate = double.tryParse(tableValues[index]['rate']) ?? 1.0;
-                              double amount = qty * rate;
+                              amount = qty * rate;
                               tableValues[index]['amount'] = amount.toStringAsFixed(2);
                             } else {
                               tableValues.add({'qty': value, 'amount': '0.00'}); // Add with default amount
