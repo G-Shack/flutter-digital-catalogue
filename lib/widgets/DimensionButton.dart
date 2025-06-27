@@ -9,9 +9,9 @@ class DimensionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
         style: const ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(Colors.amberAccent),
-            foregroundColor: MaterialStatePropertyAll(Colors.black),
-            shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+            backgroundColor: WidgetStatePropertyAll(Colors.amberAccent),
+            foregroundColor: WidgetStatePropertyAll(Colors.black),
+            shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(12))))),
         onPressed: () {
           fun!();

@@ -1,14 +1,19 @@
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
+import 'dart:io';
 import 'package:pdf/widgets.dart' as pw;
 
-class PdfService{
-  Future<Uint8List> generatePdf(String billName,List<Map<String, dynamic>> tableValues)async{
+class PdfService {
+  Future<Uint8List> generatePdf(
+      String billName, List<Map<String, dynamic>> tableValues, int piNo) async {
     final pdf = pw.Document();
-    num totalAmount =0;
+    num totalAmount = 0;
     List<pw.Widget> pageWidgets = [];
     final logo =
-    (await rootBundle.load("assets/images/logo.png")).buffer.asUint8List();
+        (await rootBundle.load("assets/images/logo.png")).buffer.asUint8List();
     final logoArea = pw.Container(
         height: 60,
         decoration: pw.BoxDecoration(border: pw.Border.all()),
@@ -38,8 +43,7 @@ class PdfService{
                                 style: const pw.TextStyle(fontSize: 8))),
                         pw.SizedBox(height: 8),
                         pw.Expanded(
-                            child: pw.Text(
-                                "Contact No. +91 9657895687",
+                            child: pw.Text("Contact No. +91 9657895687",
                                 style: const pw.TextStyle(fontSize: 10))),
                       ],
                     ))),
@@ -73,6 +77,12 @@ class PdfService{
                 padding: const pw.EdgeInsets.all(2),
                 child: pw.Expanded(
                     child: pw.Text(
+                        "PI No: ${DateFormat('yy').format(DateTime.now())}-${DateFormat('MMM').format(DateTime.now())}/$piNo",
+                        style: const pw.TextStyle(fontSize: 10)))),
+            pw.Padding(
+                padding: const pw.EdgeInsets.all(2),
+                child: pw.Expanded(
+                    child: pw.Text(
                         "Date: ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
                         style: const pw.TextStyle(fontSize: 10)))),
           ],
@@ -85,8 +95,10 @@ class PdfService{
     pw.Padding textCell(String text) {
       return pw.Padding(
           padding: const pw.EdgeInsets.all(2),
-          child: pw.Center(child: pw.Text(text, style: const pw.TextStyle(fontSize: 10))));
+          child: pw.Center(
+              child: pw.Text(text, style: const pw.TextStyle(fontSize: 10))));
     }
+
     pw.Padding textCellBold(String text) {
       return pw.Padding(
           padding: const pw.EdgeInsets.all(2),
@@ -95,13 +107,12 @@ class PdfService{
                   style: pw.TextStyle(fontWeight: pw.FontWeight.bold))));
     }
 
-
     pw.Table table() {
       List<pw.TableRow> rows = [];
 
       for (var value in tableValues) {
         print(value);
-        totalAmount+=num.parse(value["amount"]);
+        totalAmount += num.parse(value["amount"]);
         rows.add(pw.TableRow(
           children: [
             textCell(value["sr"].toString()),
@@ -146,6 +157,7 @@ class PdfService{
         ],
       );
     }
+
     pw.Table tableFooter() {
       return pw.Table(
         border: pw.TableBorder.all(),
@@ -208,7 +220,6 @@ class PdfService{
     pageWidgets.add(table());
     pageWidgets.add(tableFooter());
 
-
     pdf.addPage(pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
         margin: const pw.EdgeInsets.all(48),
@@ -217,5 +228,62 @@ class PdfService{
         }));
 
     return pdf.save();
+  }
+
+  Future<void> savePdf(String fileName, Uint8List byteList) async {
+    final output = await getTemporaryDirectory();
+    var filePath = "${output.path}/$fileName.pdf";
+    final file = File(filePath);
+    print(filePath);
+
+    //cleanup
+    await cleanupOldFiles(output.path, const Duration(days: 7));
+
+    if (output.existsSync()) {
+      final contents = output.listSync();
+      for (var entity in contents) {
+        if (entity is File) {
+          print('File: ${entity.path}');
+        } else if (entity is Directory) {
+          print('Directory: ${entity.path}');
+        }
+      }
+    } else {
+      print('Directory does not exist.');
+    }
+    await file.writeAsBytes(byteList);
+    await _openPdf(filePath);
+  }
+
+  //  helper method
+  Future<void> _openPdf(String filePath) async {
+    try {
+      final result = await OpenFilex.open(filePath);
+      print('Open file result: ${result.message}');
+
+      if (result.type != ResultType.done) {
+        print('Failed to open PDF: ${result.message}');
+        // Handle error - maybe show a snackbar or dialog
+      }
+    } catch (e) {
+      print('Error opening PDF: $e');
+      // Handle error
+    }
+  }
+
+  Future<void> cleanupOldFiles(String directoryPath, Duration maxAge) async {
+    final directory = Directory(directoryPath);
+    if (await directory.exists()) {
+      final files = await directory.list().toList();
+      for (final file in files) {
+        if (file is File) {
+          final lastModified = await file.lastModified();
+          if (DateTime.now().difference(lastModified) > maxAge) {
+            await file.delete();
+            print('Deleted old file: ${file.path}');
+          }
+        }
+      }
+    }
   }
 }

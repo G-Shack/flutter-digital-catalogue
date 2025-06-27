@@ -8,14 +8,16 @@ class TableValuesProvider extends ChangeNotifier {
     _tableValues = newTableValues;
     notifyListeners();
   }
-  void updateRow(int index, String title, String image, String size, String rate) {
+
+  void updateRow(
+      int index, String title, String image, String size, String rate) {
     if (index >= 0 && index < tableValues.length) {
       _tableValues[index]['title'] = title;
       _tableValues[index]['image'] = image;
-      _tableValues[index]['size'] = size;
+      //_tableValues[index]['size'] = size;
       _tableValues[index]['rate'] = rate;
       _tableValues[index]['amount'] = rate;
-      notifyListeners(); // Notify listeners of the change
+      notifyListeners();
     }
   }
 }
