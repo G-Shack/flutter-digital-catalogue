@@ -30,7 +30,6 @@ class _RecentPiScreenState extends State<RecentPiScreen> with RouteAware {
   void initState() {
     setState(() {
       _items = hiveService.refreshItems();
-      // print(_items);
     });
     super.initState();
   }
@@ -47,10 +46,37 @@ class _RecentPiScreenState extends State<RecentPiScreen> with RouteAware {
     super.dispose();
   }
 
+  Future<bool> _showDeleteConfirmation(String piNo, String piName) async {
+    return await showDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Confirm Delete'),
+              content:
+                  Text('Are you sure you want to delete PI #$piNo ($piName)?'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.red,
+                  ),
+                  child: const Text('Delete'),
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<TableValuesProvider>(builder: (context, provider, child) {
-      // provider.tableValues.clear();
       return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: MediaQuery.of(context).size.width < 600,
@@ -68,8 +94,15 @@ class _RecentPiScreenState extends State<RecentPiScreen> with RouteAware {
               }
 
               return Dismissible(
-                key: Key(_items[index]['piNo'].toString()),
+                key: Key(currentItem['piNo'].toString()),
                 direction: DismissDirection.endToStart,
+                confirmDismiss: (direction) async {
+                  // Show confirmation dialog
+                  return await _showDeleteConfirmation(
+                    currentItem['piNo'].toString(),
+                    currentItem['piName'],
+                  );
+                },
                 background: Padding(
                   padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
                   child: Container(
@@ -82,13 +115,19 @@ class _RecentPiScreenState extends State<RecentPiScreen> with RouteAware {
                   ),
                 ),
                 onDismissed: (direction) {
+                  // Store the PI details before removing the item
+                  final deletedPiNo = currentItem['piNo'];
+                  final deletedPiName = currentItem['piName'];
+
                   setState(() {
-                    hiveService.deleteItem(_items[index]['piNo']);
+                    hiveService.deleteItem(deletedPiNo);
                     _items.removeAt(index);
                   });
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content: Text('PI ${_items[index]['piName']} deleted')),
+                        content:
+                            Text('PI #$deletedPiNo ($deletedPiName) deleted')),
                   );
                 },
                 child: Card(
@@ -109,16 +148,34 @@ class _RecentPiScreenState extends State<RecentPiScreen> with RouteAware {
                         '/dimensions',
                         arguments: {
                           'billName': currentItem['piName'],
+                          'piNo': currentItem['piNo'], // Pass piNo
                         },
                       );
                     },
-                    leading: Text(
-                      currentItem['piNo'].toString(),
-                      style: const TextStyle(color: Colors.black),
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.amber,
+                      child: Text(
+                        currentItem['piNo'].toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                    leadingAndTrailingTextStyle: const TextStyle(fontSize: 16),
-                    title: Text(currentItem['piName']),
-                    subtitle: Text(formatDate(currentItem['date'])),
+                    title: Text(
+                      'PI #${currentItem['piNo']}',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(currentItem['piName']),
+                        Text(
+                          formatDate(currentItem['date']),
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      ],
+                    ),
                     trailing: const Icon(Icons.arrow_forward_ios),
                   ),
                 ),

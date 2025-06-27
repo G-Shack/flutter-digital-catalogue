@@ -1,6 +1,3 @@
-import 'package:alif_hw_pi/screens/main_screen.dart';
-import 'package:alif_hw_pi/screens/recent_pi_screen.dart';
-import 'package:alif_hw_pi/screens/set_rates_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {

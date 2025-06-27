@@ -14,7 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await Hive.openBox('recent_pi_box');
-
+  await Hive.openBox('counter_box');
   runApp(const MyApp());
 }
 
@@ -45,10 +45,14 @@ class MyApp extends StatelessWidget {
         navigatorObservers: [routeObserver],
         routes: {
           '/': (context) => const MainScreen(),
-          '/dimensions': (context) => DimensionPage(
-                billName: (ModalRoute.of(context)!.settings.arguments
-                    as Map<String, dynamic>)['billName'] as String,
-              ),
+          '/dimensions': (context) {
+            final args = ModalRoute.of(context)!.settings.arguments
+                as Map<String, dynamic>;
+            return DimensionPage(
+              billName: args['billName'] as String,
+              piNo: args['piNo'] as int,
+            );
+          },
           '/setRates': (context) => const SetRatesScreen(),
           '/recentPi': (context) => const RecentPiScreen(),
         },

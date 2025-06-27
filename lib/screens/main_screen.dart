@@ -1,4 +1,5 @@
 import 'package:alif_hw_pi/Provider/table_values_provider.dart';
+import 'package:alif_hw_pi/Services/hive_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,8 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   TextEditingController billName = TextEditingController();
+  HiveService hiveService = HiveService();
+  int nextPiNumber = 1;
 
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -26,11 +29,20 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
+  void _loadNextPiNumber() {
+    final counterBox = hiveService.getCounterBox();
+    int currentCounter = counterBox.get('piCounter', defaultValue: 0);
+    setState(() {
+      nextPiNumber = currentCounter + 1;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<Products>().loadProducts();
+      _loadNextPiNumber();
     });
   }
 
@@ -44,7 +56,8 @@ class _MainScreenState extends State<MainScreen> {
           ),
           drawer: const AppDrawer(),
           body: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 20.0, horizontal: 35.0),
             child: SingleChildScrollView(
               reverse: true,
               child: Center(
@@ -71,42 +84,76 @@ class _MainScreenState extends State<MainScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text(
-                            'Invoice Name',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 16),
+                            decoration: BoxDecoration(
+                              color: Colors.amber.withOpacity(0.1),
+                              border: Border.all(color: Colors.amber),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(4),
+                                bottomLeft: Radius.circular(4),
+                              ),
+                            ),
+                            child: Text(
+                              'PI #$nextPiNumber',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF212121),
+                              ),
+                            ),
                           ),
-                          const SizedBox(width: 20),
                           Expanded(
                             child: TextField(
                               controller: billName,
                               decoration: const InputDecoration(
                                 hintText: "Enter Customer Name",
-                                border: OutlineInputBorder(),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(4),
+                                    bottomRight: Radius.circular(4),
+                                  ),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 16),
                               ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 50),
                     SizedBox(
-                      width: 300,
                       child: ElevatedButton(
                         onPressed: () async {
-                          // final _recentPiBox = Hive.box('recent_pi_box');
-                          // _recentPiBox.clear();
                           if (billName.text.isEmpty) {
                             _showSnackBar('Customer Name Empty!');
                             FocusManager.instance.primaryFocus?.unfocus();
                             return;
                           }
+
+                          // Store the customer name before clearing
+                          String customerName = billName.text;
+
+                          // Create new PI immediately and get PI number
+                          int piNo =
+                              await hiveService.createNewPi(customerName);
+
+                          // Clear table values for new PI
                           provider.tableValues.clear();
+
+                          // Clear the text field and update next PI number
+                          billName.clear();
+                          _loadNextPiNumber();
+
                           Navigator.pushNamed(
                             context,
                             '/dimensions',
                             arguments: {
-                              'billName': billName.text,
+                              'billName':
+                                  customerName, // Use stored name instead
+                              'piNo': piNo,
                             },
                           );
                         },
@@ -128,7 +175,7 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 12)
+                    const SizedBox(height: 25)
                   ],
                 ),
               ),

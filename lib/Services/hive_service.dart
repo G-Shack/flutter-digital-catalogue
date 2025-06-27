@@ -2,81 +2,86 @@ import 'package:hive/hive.dart';
 
 class HiveService {
   final _recentPiBox = Hive.box('recent_pi_box');
-  Future<int> createItem(
-      List<Map<String, dynamic>> tableValues, String billName) async {
-    // Check if bill name already exists
-    final existingKey = _recentPiBox.keys.firstWhere(
-        (key) => _recentPiBox.get(key)['piName'] == billName,
-        orElse: () => null);
+  final _counterBox = Hive.box('counter_box');
 
-    if (existingKey != null) {
-      final existingItem = _recentPiBox.get(existingKey);
-      existingItem['tableValues'] = tableValues;
-      existingItem['date'] = DateTime.now();
-      await _recentPiBox.put(existingKey, existingItem);
-      return existingItem['piNo'] as int;
-    } else {
-      int largestPiNo = 0;
-      for (var item in _recentPiBox.values) {
-        final piNo = item['piNo'];
-        try {
-          final piNoInt = piNo;
-          if (piNoInt > largestPiNo) {
-            largestPiNo = piNoInt;
-          }
-        } catch (e) {
-          print('Error parsing piNo: $e');
-        }
+  Box getCounterBox() {
+    return _counterBox;
+  }
+
+  int getNextPiNumber() {
+    int currentCounter = _counterBox.get('piCounter', defaultValue: 0);
+    int nextPiNo = currentCounter + 1;
+    _counterBox.put('piCounter', nextPiNo);
+    return nextPiNo;
+  }
+
+  Future<int> createNewPi(String piName) async {
+    int piNo = getNextPiNumber();
+
+    Map<String, dynamic> piData = {
+      'piNo': piNo,
+      'piName': piName,
+      'date': DateTime.now(),
+      'tableValues': <Map<String, dynamic>>[], // Initialize with empty table
+    };
+
+    await _recentPiBox.put(piNo, piData);
+    return piNo;
+  }
+
+  Future<void> updatePi(int piNo, List<Map<String, dynamic>> tableValues,
+      {String? piName}) async {
+    final existingData = _recentPiBox.get(piNo);
+    if (existingData != null) {
+      existingData['tableValues'] = tableValues;
+      existingData['date'] = DateTime.now(); // Update last modified date
+      if (piName != null) {
+        existingData['piName'] = piName;
       }
-      int piNo = largestPiNo + 1;
-      Map<String, dynamic> piValues = {};
-      piValues.addAll({
-        'piNo': piNo,
-        'piName': billName,
-        'date': DateTime.now(),
-        'tableValues': tableValues
-      });
-      await _recentPiBox.add(piValues);
-      return piNo;
+      await _recentPiBox.put(piNo, existingData);
     }
+  }
+
+  Map<String, dynamic>? getPi(int piNo) {
+    return _recentPiBox.get(piNo);
   }
 
   List<Map<String, dynamic>> refreshItems() {
     final now = DateTime.now();
-    final xMonthsAgo = now.subtract(const Duration(days: 366));
+    final oneYearAgo = now.subtract(const Duration(days: 366));
 
-    final data = _recentPiBox.keys
-        .map((key) {
-          final piValue = _recentPiBox.get(key);
-          final itemDate = piValue['date'] as DateTime;
+    List<Map<String, dynamic>> validItems = [];
+    List<int> keysToDelete = [];
 
-          if (itemDate.isBefore(xMonthsAgo)) {
-            _recentPiBox.delete(key);
-            return null;
-          } else {
-            return {
-              "key": key,
-              "piNo": piValue['piNo'],
-              "piName": piValue['piName'],
-              "date": piValue['date'],
-              "tableValues": piValue['tableValues']
-            };
-          }
-        })
-        .whereType<Map<String, dynamic>>()
-        .toList();
-    return data.reversed.toList();
+    for (var key in _recentPiBox.keys) {
+      final piValue = _recentPiBox.get(key);
+      if (piValue != null) {
+        final itemDate = piValue['date'] as DateTime;
+
+        if (itemDate.isBefore(oneYearAgo)) {
+          keysToDelete.add(key);
+        } else {
+          validItems.add({
+            "piNo": piValue['piNo'],
+            "piName": piValue['piName'],
+            "date": piValue['date'],
+            "tableValues": piValue['tableValues']
+          });
+        }
+      }
+    }
+
+    // Delete expired items
+    for (var key in keysToDelete) {
+      _recentPiBox.delete(key);
+    }
+
+    // Sort by piNo in descending order (latest first)
+    validItems.sort((a, b) => (b['piNo'] as int).compareTo(a['piNo'] as int));
+    return validItems;
   }
 
   Future<void> deleteItem(int piNo) async {
-    final key = _recentPiBox.keys.firstWhere(
-        (key) => _recentPiBox.get(key)['piNo'] == piNo,
-        orElse: () => null);
-
-    if (key != null) {
-      await _recentPiBox.delete(key);
-    } else {
-      print('Item with piNo $piNo not found in the box.');
-    }
+    await _recentPiBox.delete(piNo);
   }
 }

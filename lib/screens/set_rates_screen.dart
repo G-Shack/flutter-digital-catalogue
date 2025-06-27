@@ -1,5 +1,6 @@
 import 'package:alif_hw_pi/Provider/product_list_provider.dart';
 import 'package:alif_hw_pi/screens/product_details_page.dart';
+import 'package:alif_hw_pi/widgets/AppDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../model/product_model.dart';
@@ -13,7 +14,7 @@ class SetRatesScreen extends StatefulWidget {
 }
 
 class _SetRatesScreenState extends State<SetRatesScreen> {
-  List<Product> _allProducts =[];
+  List<Product> _allProducts = [];
   List<Product> _foundProducts = [];
   @override
   initState() {
@@ -29,17 +30,19 @@ class _SetRatesScreenState extends State<SetRatesScreen> {
     } else {
       results = _allProducts
           .where((user) =>
-          user.title.toLowerCase().contains(enteredKeyword.toLowerCase()))
+              user.title.toLowerCase().contains(enteredKeyword.toLowerCase()))
           .toList();
     }
     setState(() {
       _foundProducts = results;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Set Rates')),
+      drawer: const AppDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(18),
         child: Column(
@@ -50,8 +53,9 @@ class _SetRatesScreenState extends State<SetRatesScreen> {
             TextField(
               onChanged: (value) => _runFilter(value),
               decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                  labelText: 'Search', prefixIcon: Icon(Icons.search)),
+                  border: OutlineInputBorder(),
+                  labelText: 'Search',
+                  prefixIcon: Icon(Icons.search)),
             ),
             const SizedBox(
               height: 20,
@@ -60,47 +64,66 @@ class _SetRatesScreenState extends State<SetRatesScreen> {
               return Expanded(
                 child: _foundProducts.isNotEmpty
                     ? ListView.builder(
-                  itemCount: _foundProducts.length,
-                  itemBuilder: (context, index) => Card(
-                    key: ValueKey(_foundProducts[index].title),
-                    elevation: 4,
-                    margin: const EdgeInsets.symmetric(vertical: 10),
-                    child: ListTile(
-                      leading: Image.asset(
-                        _foundProducts[index].image,
-                        fit: BoxFit.fill,
-                      ),
-                      trailing: const Icon(Icons.arrow_forward_ios_rounded),
-                      title: Text(_foundProducts[index].title, style:const TextStyle(fontWeight: FontWeight.bold
-                      )),
-                      subtitle: Text(
-                          'Rate: ${_foundProducts[index].rate} \t \t Size: ${_foundProducts[index].size}',
-                          style:const TextStyle(color: Colors.black)),
-                      onTap: (){
-                        FocusManager.instance.primaryFocus?.unfocus();
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetailsPage(theProduct: _foundProducts[index])));
-                      },
-                    ),
-                  ),
-                )
+                        itemCount: _foundProducts.length,
+                        itemBuilder: (context, index) => Card(
+                          key: ValueKey(_foundProducts[index].title),
+                          elevation: 4,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          child: ListTile(
+                            leading: Image.asset(
+                              _foundProducts[index].image,
+                              fit: BoxFit.fill,
+                            ),
+                            trailing:
+                                const Icon(Icons.arrow_forward_ios_rounded),
+                            title: Text(_foundProducts[index].title,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            subtitle: Text(
+                                'Rate: ${_foundProducts[index].rate} \t \t Size: ${_foundProducts[index].size}',
+                                style: const TextStyle(color: Colors.black)),
+                            onTap: () {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProductDetailsPage(
+                                          theProduct: _foundProducts[index])));
+                            },
+                          ),
+                        ),
+                      )
                     : const Text(
-                  'No results found',
-                  style: TextStyle(fontSize: 24),
-                ),
-            );}
-            ),
+                        'No results found',
+                        style: TextStyle(fontSize: 24),
+                      ),
+              );
+            }),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        int lastProductIndex = (_allProducts.length)-1;
-        int lastProductId = int.tryParse(_allProducts[lastProductIndex].id)??1000;
-        Product newProduct = Product(id: '${lastProductId+1}', title: '', description: '', image: 'assets/images/noImage.png', size: '', rate: '');
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetailsPage(theProduct: newProduct)));
-        context.read<Products>().addProduct(newProduct);
-        print(newProduct.id);
-      },
-      child: const Icon(Icons.add),),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          int lastProductIndex = (_allProducts.length) - 1;
+          int lastProductId =
+              int.tryParse(_allProducts[lastProductIndex].id) ?? 1000;
+          Product newProduct = Product(
+              id: '${lastProductId + 1}',
+              title: '',
+              description: '',
+              image: 'assets/images/noImage.png',
+              size: '',
+              rate: '');
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      ProductDetailsPage(theProduct: newProduct)));
+          context.read<Products>().addProduct(newProduct);
+          print(newProduct.id);
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

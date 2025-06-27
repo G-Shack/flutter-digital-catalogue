@@ -9,7 +9,9 @@ import 'ProductSearchDialog.dart';
 
 class InvoiceTable extends StatefulWidget {
   final List<Map<String, dynamic>>? initialTableValues;
-  const InvoiceTable({super.key, this.initialTableValues});
+  final int? piNo;
+
+  const InvoiceTable({super.key, this.initialTableValues, this.piNo});
 
   @override
   State<InvoiceTable> createState() => _InvoiceTableState();
